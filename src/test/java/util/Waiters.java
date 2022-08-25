@@ -20,8 +20,4 @@ public class Waiters {
         wait.until(ExpectedConditions.elementToBeClickable(element));
         return element;
     }
-
-    public static WebDriverWait getWait(int timeToWait) {
-        return new WebDriverWait(DriverSingleton.getDriver(), Duration.ofSeconds(timeToWait));
-    }
 }
