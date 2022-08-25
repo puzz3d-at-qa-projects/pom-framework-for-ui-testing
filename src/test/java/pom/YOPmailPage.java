@@ -1,5 +1,6 @@
 package pom;
 
+import model.TemporaryEmail;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -12,22 +13,18 @@ public class YOPmailPage extends BasePage {
 
     @FindBy(css = "button#refresh")
     private WebElement refreshButton;
-
     @FindBy(css = "iframe#ifmail")
     private WebElement mailIframe;
-
     @FindBy(css = "h1 ~ h2")
     private WebElement estimatedH2;
-
     public YOPmailPage(WebDriver driver) {
-
         super(driver);
     }
 
 
     public String getEmailedEstimatedCost() {
         switchWindow();
-        driver.get(StringUtils.getTempEmailWebInterfaceURL());
+        driver.get(TemporaryEmail.getTempEmailWebInterfaceURL());
         waitToBeClickable(refreshButton, 10);
         for (int i = 0; i < 20; i++) {
             if (safeIsDisplayed(estimatedH2)) {
@@ -38,9 +35,9 @@ public class YOPmailPage extends BasePage {
                 doNothing(3000);
             }
         }
-        System.out.println("h2: " + estimatedH2);
-        System.out.println("h2 text: " + estimatedH2.getText());
-        return StringUtils.stripPrice(estimatedH2.getText());
+        String cost = StringUtils.stripPrice(estimatedH2.getText());
+        LOGGER.debug("Emailed cost in USD: " + cost);
+        return cost;
     }
 
     private static void doNothing(int sleepInMillis) {
@@ -55,12 +52,10 @@ public class YOPmailPage extends BasePage {
         boolean result = false;
         try {
             driver.switchTo().frame(mailIframe);
-            System.out.println("estimatedH2.isDisplayed(): " + estimatedH2.isDisplayed());
             if (estimatedH2.isDisplayed()) result = true;
         } catch (NoSuchElementException e) {
-            System.out.println("H2 not found"); // change it!
+            LOGGER.warn("Email not visible...");
         }
-        System.out.println("safeIsDisplayed return: " + result);
         return result;
     }
 }

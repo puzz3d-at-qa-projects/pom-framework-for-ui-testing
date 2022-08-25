@@ -14,7 +14,6 @@ public class GCloudPage extends BasePage {
 
     @FindBy(name = "q")
     private WebElement searchInput;
-
     @FindBy(xpath = "//a//*[text()='Google Cloud Platform Pricing Calculator']")
     private WebElement calculatorLink;
 
@@ -32,6 +31,7 @@ public class GCloudPage extends BasePage {
         waitToBeClickable(searchInput, 5).click();
         searchInput.sendKeys(SEARCH_STRING + Keys.ENTER);
         waitToBeClickable(calculatorLink, 10).click();
+        LOGGER.debug("Following a " + SEARCH_STRING + " link");
         return new GCloudPricingCalculatorPage(driver);
     }
 }
