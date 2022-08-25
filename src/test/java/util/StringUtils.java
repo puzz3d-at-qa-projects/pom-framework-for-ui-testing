@@ -11,9 +11,4 @@ public class StringUtils {
         var m = p.matcher(text);
         return m.find() ? m.group(0) : PATTERN_ERROR;
     }
-
-    public static String getTempEmailWebInterfaceURL() {
-        String base = "https://YOPmail.com?";
-        return base + SharedContext.tempEmail;
-    }
 }
