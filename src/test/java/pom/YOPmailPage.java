@@ -21,7 +21,6 @@ public class YOPmailPage extends BasePage {
         super(driver);
     }
 
-
     public String getEmailedEstimatedCost() {
         switchWindow();
         driver.get(TemporaryEmail.getTempEmailWebInterfaceURL());

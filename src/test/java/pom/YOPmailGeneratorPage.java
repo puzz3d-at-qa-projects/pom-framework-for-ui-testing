@@ -11,15 +11,12 @@ import static util.Waiters.waitVisibility;
 public class YOPmailGeneratorPage extends BasePage {
     private final static String PAGE_URL = "https://yopmail.com/en/email-generator";
 
-    TemporaryEmail tempEmail;
-
     @FindBy(css = "div#egen")
     private WebElement emailDiv;
 
     public YOPmailGeneratorPage(WebDriver driver) {
         super(driver);
     }
-
     public YOPmailGeneratorPage openPage() {
         driver.switchTo().newWindow(WindowType.TAB);
         driver.get(PAGE_URL);
