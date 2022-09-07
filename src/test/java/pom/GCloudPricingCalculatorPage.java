@@ -1,6 +1,8 @@
 package pom;
 
+import model.CloudInstance;
 import model.TemporaryEmail;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -11,8 +13,6 @@ import static util.Waiters.waitVisibility;
 
 public class GCloudPricingCalculatorPage extends BasePage{
 
-    public static final String NUMBER_OF_INSTANCES = "4";
-
     @FindBy(xpath = "//iframe[contains(@src, '/calculator')]")
     private WebElement firstIframe;
     @FindBy(css = "iframe#myFrame")
@@ -21,12 +21,8 @@ public class GCloudPricingCalculatorPage extends BasePage{
     private WebElement numberOfInstancesInput;
     @FindBy(css = "md-select[ng-model='listingCtrl.computeServer.instance']")
     private WebElement instanceTypeMenu;
-    @FindBy(xpath = "//div[contains(text(), 'e2-standard-8')]")
-    private WebElement instanceType;
     @FindBy(css = "md-select[ng-model='listingCtrl.computeServer.location']")
     private WebElement locationMenu;
-    @FindBy(xpath = "//div[contains(@class,'md-clickable')]//div[contains(text(), 'Frankfurt')]")
-    private WebElement location;
     @FindBy(xpath = "//button[contains(@ng-disabled, 'ComputeEngineForm')]")
     private WebElement addToEstimateButton;
     @FindBy(css = "h2 b.ng-binding")
@@ -42,14 +38,21 @@ public class GCloudPricingCalculatorPage extends BasePage{
         super(driver);
     }
 
-    public GCloudPricingCalculatorPage fillInConditions() {
+    public GCloudPricingCalculatorPage fillInConditions(CloudInstance testCloudInstance) {
+
+        String numberOfInstances = testCloudInstance.getNumberOfInstances();
+        String typeLocator = testCloudInstance.getInstanceTypeLocator();
+        String locationLocator = testCloudInstance.getInstanceLocationLocator();
+        LOGGER.debug("Model type locator: " + typeLocator);
+        LOGGER.debug("Model location locator: " + locationLocator);
+
         switchToCalcIframe();
         waitToBeClickable(numberOfInstancesInput, 10).click();
-        numberOfInstancesInput.sendKeys(NUMBER_OF_INSTANCES);
-        instanceTypeMenu.click();
-        waitToBeClickable(instanceType,5).click();
-        locationMenu.click();
-        waitToBeClickable(location, 5).click();
+        numberOfInstancesInput.sendKeys(numberOfInstances);
+        waitToBeClickable(instanceTypeMenu, 5).click();
+        waitVisibility(driver.findElement(By.xpath(typeLocator)),5).click();
+        waitToBeClickable(locationMenu,5).click();
+        waitVisibility(driver.findElement(By.xpath(locationLocator)),5).click();
         addToEstimateButton.click();
         LOGGER.debug("Instance model added to estimation.");
         return this;
