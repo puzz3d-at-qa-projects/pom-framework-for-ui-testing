@@ -5,8 +5,9 @@ Test checks if the calculated cost for the given model of cloud instance matches
 ## Stack
 
 - Java 17.  
-- Selenium WebDriver
-- TestNG
+- Selenium WebDriver.
+- TestNG.
+- Log4j.
 - Gradle.
 
 ## Features
